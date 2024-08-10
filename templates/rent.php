@@ -169,29 +169,32 @@ p {
         $pdo = new PDO($dsn, $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Handle new rental submission
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_rental'])) {
-            $user_id = 1; // Assuming you have a logged-in user ID
-            $duration = $_POST['duration'];
-            $rental_date = date('Y-m-d');
-            $return_date = date('Y-m-d', strtotime("+$duration days"));
-            $status = 'Active';
+       // Handle new rental submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_rental'])) {
+    $user_id = 1; // Assuming you have a logged-in user ID
+    $duration = $_POST['duration'];
+    $rental_date = date('Y-m-d');
+    $return_date = date('Y-m-d', strtotime("+$duration days"));
+    $status = 'Active';
 
-            // Insert new rental
-            $insert_query = "INSERT INTO rentals (user_id, rental_date, return_date, status) 
-                             VALUES (:user_id, :rental_date, :return_date, :status)";
-            $insert_stmt = $pdo->prepare($insert_query);
-            $insert_stmt->execute([
-                ':user_id' => $user_id,
-                ':rental_date' => $rental_date,
-                ':return_date' => $return_date,
-                ':status' => $status
-            ]);
+    // Insert new rental
+    $insert_query = "INSERT INTO rentals (user_id, rental_date, return_date, status) 
+                     VALUES (:user_id, :rental_date, :return_date, :status)";
+    $insert_stmt = $pdo->prepare($insert_query);
+    $insert_stmt->execute([
+        ':user_id' => $user_id,
+        ':rental_date' => $rental_date,
+        ':return_date' => $return_date,
+        ':status' => $status
+    ]);
 
-            $new_rental_id = $pdo->lastInsertId();
+    $new_rental_id = $pdo->lastInsertId();
 
-            echo "<p>New rental added successfully! Rental ID: $new_rental_id</p>";
-        }
+    echo "<p>New rental added successfully! Rental ID: $new_rental_id</p>";
+}// Display success message if present
+if (isset($_GET['success']) && $_GET['success'] == 1 && isset($_GET['rental_id'])) {
+    echo "<p>New rental added successfully! Rental ID: " . htmlspecialchars($_GET['rental_id']) . "</p>";
+}
 
         // Fetch rent history for the logged-in user
         $user_id = 1; // Assuming you have a logged-in user ID
