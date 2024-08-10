@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Charts / Chart.js - NiceAdmin Bootstrap Template</title>
+  <title>Rental Dashboard - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -30,48 +29,11 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-  
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
 
   <style>
-    body {
-      font-family: 'Poppins', Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      width: 85%;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    h1, h2 {
-      color: #333;
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 30px;
-    }
-
-    h1 {
-      font-size: 2.5em;
-      letter-spacing: 1px;
-    }
-
-    h2 {
-      font-size: 2em;
-      letter-spacing: 0.5px;
-    }
-
     .rental-form {
       background-color: #fff;
       padding: 25px;
@@ -91,7 +53,7 @@
     }
 
     .rental-form input[type="submit"] {
-      background-color: #FF4C60;
+      background-color: #4154f1;
       color: white;
       border: none;
       cursor: pointer;
@@ -101,20 +63,266 @@
     }
 
     .rental-form input[type="submit"]:hover {
-      background-color: #ff6c80;
+      background-color: #5969f3;
     }
 
-    #rental-chart {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
+    .chart {
+      margin-bottom: 30px;
     }
   </style>
-
 </head>
 
 <body>
-  
+<?php
+// Configuration for the database connection
+$dsn = 'mysql:host=localhost;dbname=bibliotheque';
+$username = 'root';
+$password = '';
+
+try {
+    // Create a PDO instance
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Define the user ID (assuming it's 1 for the example)
+    $user_id = 1;
+
+    // Handle rental deletion
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_rental'])) {
+        $delete_rental_id = $_POST['delete_rental_id'];
+
+        // Verify the rental ID and user ID
+        if (!empty($delete_rental_id) && !empty($user_id)) {
+            // Delete the rental
+            $delete_query = "DELETE FROM rentals WHERE id = :delete_rental_id AND user_id = :user_id";
+            $delete_stmt = $pdo->prepare($delete_query);
+            $delete_stmt->bindParam(':delete_rental_id', $delete_rental_id, PDO::PARAM_INT);
+            $delete_stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            if ($delete_stmt->execute()) {
+                echo "<p>Rental ID $delete_rental_id has been deleted successfully.</p>";
+            } else {
+                echo "<p>Failed to delete Rental ID $delete_rental_id.</p>";
+            }
+        } else {
+            echo "<p>Invalid rental ID or user ID.</p>";
+        }
+    }
+
+    // Handle new rental submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_rental'])) {
+        $duration = $_POST['duration'];
+        $rental_date = date('Y-m-d');
+        $return_date = date('Y-m-d', strtotime("+$duration days"));
+        $status = 'Active';
+
+        // Insert new rental
+        $insert_query = "INSERT INTO rentals (user_id, rental_date, return_date, status) 
+                         VALUES (:user_id, :rental_date, :return_date, :status)";
+        $insert_stmt = $pdo->prepare($insert_query);
+        $insert_stmt->execute([
+            ':user_id' => $user_id,
+            ':rental_date' => $rental_date,
+            ':return_date' => $return_date,
+            ':status' => $status
+        ]);
+
+        $new_rental_id = $pdo->lastInsertId();
+
+        echo "<p>New rental added successfully! Rental ID: $new_rental_id</p>";
+    }
+
+    // Fetch rent history for the logged-in user
+    $search_title = isset($_GET['search_title']) ? $_GET['search_title'] : '';
+    $search_status = isset($_GET['search_status']) ? $_GET['search_status'] : '';
+    $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'rental_date';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
+
+    $query = "SELECT r.*, DATEDIFF(r.return_date, r.rental_date) AS rent_duration 
+              FROM rentals r
+              WHERE r.user_id = :user_id";
+
+    // Add search conditions
+    if (!empty($search_title)) {
+        $query .= " AND r.id LIKE :search_title";
+    }
+    if (!empty($search_status)) {
+        $query .= " AND r.status = :search_status";
+    }
+
+    // Add sorting
+    $query .= " ORDER BY $sort_by $sort_order";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    if (!empty($search_title)) {
+        $stmt->bindValue(':search_title', "%$search_title%", PDO::PARAM_STR);
+    }
+    if (!empty($search_status)) {
+        $stmt->bindParam(':search_status', $search_status, PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    $rentals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Prepare data for statistics
+    $status_counts = array_count_values(array_column($rentals, 'status'));
+    $duration_counts = array_count_values(array_column($rentals, 'rent_duration'));
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>My Rent History</h1>
+    </div>
+
+    <section class="section dashboard">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Rent History</h5>
+
+              <!-- Search and filter form -->
+              <form method='get' class='mb-3'>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <input type='text' class="form-control" name='search_title' placeholder='Search by rental ID' value='<?php echo htmlspecialchars($search_title); ?>'>
+                  </div>
+                  <div class="col-md-3">
+                    <select name='search_status' class="form-select">
+                      <option value=''>All Statuses</option>
+                      <option value='Active' <?php echo ($search_status == 'Active' ? "selected" : ""); ?>>Active</option>
+                      <option value='Returned' <?php echo ($search_status == 'Returned' ? "selected" : ""); ?>>Returned</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <select name='sort_by' class="form-select">
+                      <option value='rental_date' <?php echo ($sort_by == 'rental_date' ? "selected" : ""); ?>>Rental Date</option>
+                      <option value='return_date' <?php echo ($sort_by == 'return_date' ? "selected" : ""); ?>>Return Date</option>
+                      <option value='rent_duration' <?php echo ($sort_by == 'rent_duration' ? "selected" : ""); ?>>Rent Duration</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <select name='sort_order' class="form-select">
+                      <option value='DESC' <?php echo ($sort_order == 'DESC' ? "selected" : ""); ?>>Descending</option>
+                      <option value='ASC' <?php echo ($sort_order == 'ASC' ? "selected" : ""); ?>>Ascending</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search & Sort</button>
+                  </div>
+                </div>
+              </form>
+
+              <!-- Rent history table -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Rental ID</th>
+                    <th>Rental Date</th>
+                    <th>Return Date</th>
+                    <th>Rent Duration</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+    <?php foreach ($rentals as $rental): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($rental['id']); ?></td>
+            <td><?php echo htmlspecialchars($rental['rental_date']); ?></td>
+            <td><?php echo htmlspecialchars($rental['return_date']); ?></td>
+            <td><?php echo htmlspecialchars($rental['rent_duration']); ?> days</td>
+            <td><?php echo htmlspecialchars($rental['status']); ?></td>
+            <td>
+                <form method="post" onsubmit="return confirm('Are you sure you want to delete this rental?');">
+                    <input type="hidden" name="delete_rental_id" value="<?php echo htmlspecialchars($rental['id']); ?>">
+                    <button type="submit" class="btn btn-danger btn-sm" name="delete_rental">Delete</button>
+                </form>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Rental Status Distribution</h5>
+              <canvas id="statusChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Rental Duration Distribution</h5>
+              <canvas id="durationChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Status Chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'pie',
+        data: {
+            labels: <?php echo json_encode(array_keys($status_counts)); ?>,
+            datasets: [{
+                data: <?php echo json_encode(array_values($status_counts)); ?>,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Rental Status Distribution'
+                }
+            }
+        }
+    });
+
+    // Duration Chart
+    new Chart(document.getElementById('durationChart'), {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode(array_keys($duration_counts)); ?>,
+            datasets: [{
+                label: 'Number of Rentals',
+                data: <?php echo json_encode(array_values($duration_counts)); ?>,
+                backgroundColor: '#4BC0C0'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Rental Duration Distribution'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -289,80 +497,258 @@
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
+            </a><!-- End Profile Iamge Icon -->
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+  <li class="dropdown-header">
+    <h6>Kevin Anderson</h6>
+    <span>Web Designer</span>
+  </li>
+  <li>
+    <hr class="dropdown-divider">
+  </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+  <li>
+    <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+      <i class="bi bi-person"></i>
+      <span>My Profile</span>
+    </a>
+  </li>
+  <li>
+    <hr class="dropdown-divider">
+  </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+  <li>
+    <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+      <i class="bi bi-gear"></i>
+      <span>Account Settings</span>
+    </a>
+  </li>
+  <li>
+    <hr class="dropdown-divider">
+  </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+  <li>
+    <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+      <i class="bi bi-question-circle"></i>
+      <span>Need Help?</span>
+    </a>
+  </li>
+  <li>
+    <hr class="dropdown-divider">
+  </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
+  <li>
+    <a class="dropdown-item d-flex align-items-center" href="#">
+      <i class="bi bi-box-arrow-right"></i>
+      <span>Sign Out</span>
+    </a>
+  </li>
 
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
+</ul><!-- End Profile Dropdown Items -->
+</li><!-- End Profile Nav -->
 
-      </ul>
-    </nav><!-- End Icons Navigation -->
+</ul>
+</nav><!-- End Icons Navigation -->
 
-  </header><!-- End Header -->
+</header><!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-nav" id="sidebar-nav">
+
+<li class="nav-item">
+<a class="nav-link " href="index.html">
+<i class="bi bi-grid"></i>
+<span>Dashboard</span>
+</a>
+</li><!-- End Dashboard Nav -->
+
+<li class="nav-item">
+<a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+<i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+</a>
+<ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+<li>
+  <a href="components-alerts.html">
+    <i class="bi bi-circle"></i><span>Alerts</span>
+  </a>
+</li>
+<li>
+  <a href="components-accordion.html">
+    <i class="bi bi-circle"></i><span>Accordion</span>
+  </a>
+</li>
+<li>
+  <a href="components-badges.html">
+    <i class="bi bi-circle"></i><span>Badges</span>
+  </a>
+</li>
+<li>
+  <a href="components-breadcrumbs.html">
+    <i class="bi bi-circle"></i><span>Breadcrumbs</span>
+  </a>
+</li>
+<li>
+  <a href="components-buttons.html">
+    <i class="bi bi-circle"></i><span>Buttons</span>
+  </a>
+</li>
+<li>
+  <a href="components-cards.html">
+    <i class="bi bi-circle"></i><span>Cards</span>
+  </a>
+</li>
+<li>
+  <a href="components-carousel.html">
+    <i class="bi bi-circle"></i><span>Carousel</span>
+  </a>
+</li>
+<li>
+  <a href="components-list-group.html">
+    <i class="bi bi-circle"></i><span>List group</span>
+  </a>
+</li>
+<li>
+  <a href="components-modal.html">
+    <i class="bi bi-circle"></i><span>Modal</span>
+  </a>
+</li>
+<li>
+  <a href="components-tabs.html">
+    <i class="bi bi-circle"></i><span>Tabs</span>
+  </a>
+</li>
+<li>
+  <a href="components-pagination.html">
+    <i class="bi bi-circle"></i><span>Pagination</span>
+  </a>
+</li>
+<li>
+  <a href="components-progress.html">
+    <i class="bi bi-circle"></i><span>Progress</span>
+  </a>
+</li>
+<li>
+  <a href="components-spinners.html">
+    <i class="bi bi-circle"></i><span>Spinners</span>
+  </a>
+</li>
+<li>
+  <a href="components-tooltips.html">
+    <i class="bi bi-circle"></i><span>Tooltips</span>
+  </a>
+</li>
+</ul>
+</li><!-- End Components Nav -->
+<li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="forms-elements.html">
+              <i class="bi bi-circle"></i><span>Form Elements</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-layouts.html">
+              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-editors.html">
+              <i class="bi bi-circle"></i><span>Form Editors</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-validation.html">
+              <i class="bi bi-circle"></i><span>Form Validation</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-      </li><!-- End Dashboard Nav -->
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Tables Nav -->
 
       <li class="nav-item">
-        <a class="nav-link" href="charts-chartjs.html">
-          <i class="bi bi-bar-chart"></i>
-          <span>Charts</span>
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="charts-chartjs.php">
+              <i class="bi bi-circle"></i><span>Chart.js</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-apexcharts.html">
+              <i class="bi bi-circle"></i><span>ApexCharts</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>ECharts</span>
+            </a>
+          </li>
+        </ul>
       </li><!-- End Charts Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="icons-bootstrap.html">
+              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Remix Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>Boxicons</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Icons Nav -->
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-faq.html">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-contact.html">
@@ -385,265 +771,20 @@
         </a>
       </li><!-- End Login Page Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-error-404.html">
+          <i class="bi bi-dash-circle"></i>
+          <span>Error 404</span>
+        </a>
+      </li><!-- End Error 404 Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-blank.html">
+          <i class="bi bi-file-earmark"></i>
+          <span>Blank</span>
+        </a>
+      </li><!-- End Blank Page Nav -->
+
     </ul>
 
   </aside><!-- End Sidebar-->
-
-  <main id="main" class="main">
-
-    <div class="pagetitle">
-      <h1>Chart.js</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Chart.js</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-    </section>
-    <?php
-    // Configuration for the database connection
-    $dsn = 'mysql:host=localhost;dbname=bibliotheque';
-    $username = 'root';
-    $password = '';
-
-    try {
-        // Create a PDO instance
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // Handle new rental submission
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_rental'])) {
-            $user_id = 1; // Assuming you have a logged-in user ID
-            $duration = $_POST['duration'];
-            $rental_date = date('Y-m-d');
-            $return_date = date('Y-m-d', strtotime("+$duration days"));
-            $status = 'Active';
-
-            // Insert new rental
-            $insert_query = "INSERT INTO rentals (user_id, rental_date, return_date, status) 
-                             VALUES (:user_id, :rental_date, :return_date, :status)";
-            $insert_stmt = $pdo->prepare($insert_query);
-            $insert_stmt->execute([
-                ':user_id' => $user_id,
-                ':rental_date' => $rental_date,
-                ':return_date' => $return_date,
-                ':status' => $status
-            ]);
-
-            $new_rental_id = $pdo->lastInsertId();
-
-            echo "<p>New rental added successfully! Rental ID: $new_rental_id</p>";
-        }
-
-        // Fetch rent history for the logged-in user
-        $user_id = 1; // Assuming you have a logged-in user ID
-
-        // Handle search and sorting
-        $search_title = isset($_GET['search_title']) ? $_GET['search_title'] : '';
-        $search_status = isset($_GET['search_status']) ? $_GET['search_status'] : '';
-        $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'rental_date';
-        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
-
-        // Base query
-        $query = "SELECT r.*, DATEDIFF(r.return_date, r.rental_date) AS rent_duration 
-                  FROM rentals r
-                  WHERE r.user_id = :user_id";
-
-        // Add search conditions
-        if (!empty($search_title)) {
-            $query .= " AND r.id LIKE :search_title"; // Assuming 'id' is a unique identifier for the rental
-        }
-        if (!empty($search_status)) {
-            $query .= " AND r.status = :search_status";
-        }
-
-        // Add sorting
-        $query .= " ORDER BY $sort_by $sort_order";
-
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        if (!empty($search_title)) {
-            $stmt->bindValue(':search_title', "%$search_title%", PDO::PARAM_STR);
-        }
-        if (!empty($search_status)) {
-            $stmt->bindParam(':search_status', $search_status, PDO::PARAM_STR);
-        }
-        $stmt->execute();
-        $rentals = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Display search and filter form
-        echo "<h1>My Rent History</h1>";
-        echo "<form method='get' class='search-form'>";
-        echo "<input type='text' name='search_title' placeholder='Search by rental ID' value='" . htmlspecialchars($search_title) . "'>";
-        echo "<select name='search_status'>";
-        echo "<option value=''>All Statuses</option>";
-        echo "<option value='Active'" . ($search_status == 'Active' ? " selected" : "") . ">Active</option>";
-        echo "<option value='Returned'" . ($search_status == 'Returned' ? " selected" : "") . ">Returned</option>";
-        echo "</select>";
-        echo "<select name='sort_by'>";
-        echo "<option value='rental_date'" . ($sort_by == 'rental_date' ? " selected" : "") . ">Rental Date</option>";
-        echo "<option value='return_date'" . ($sort_by == 'return_date' ? " selected" : "") . ">Return Date</option>";
-        echo "<option value='rent_duration'" . ($sort_by == 'rent_duration' ? " selected" : "") . ">Rent Duration</option>";
-        echo "</select>";
-        echo "<select name='sort_order'>";
-        echo "<option value='DESC'" . ($sort_order == 'DESC' ? " selected" : "") . ">Descending</option>";
-        echo "<option value='ASC'" . ($sort_order == 'ASC' ? " selected" : "") . ">Ascending</option>";
-        echo "</select>";
-        echo "<input type='submit' value='Search & Sort'>";
-        echo "</form>";
-
-        // Display rent history
-        echo "<table>";
-        echo "<tr><th>Rental ID</th><th>Rental Date</th><th>Return Date</th><th>Rent Duration</th><th>Status</th></tr>";
-        foreach ($rentals as $rental) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($rental['id']) . "</td>";
-            echo "<td>" . htmlspecialchars($rental['rental_date']) . "</td>";
-            echo "<td>" . htmlspecialchars($rental['return_date']) . "</td>";
-            echo "<td>" . htmlspecialchars($rental['rent_duration']) . " days</td>";
-            echo "<td>" . htmlspecialchars($rental['status']) . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-
-        // Prepare data for statistics
-        $status_counts = array_count_values(array_column($rentals, 'status'));
-        $duration_counts = array_count_values(array_column($rentals, 'rent_duration'));
-
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-    ?>
-
-    <div class="charts-container">
-        <div class="chart">
-            <canvas id="statusChart"></canvas>
-        </div>
-        <div class="chart">
-            <canvas id="durationChart"></canvas>
-        </div>
-    </div>
-
-    <script>
-    // Status Chart
-    new Chart(document.getElementById('statusChart'), {
-        type: 'pie',
-        data: {
-            labels: <?php echo json_encode(array_keys($status_counts)); ?>,
-            datasets: [{
-                data: <?php echo json_encode(array_values($status_counts)); ?>,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Rental Status Distribution'
-                }
-            }
-        }
-    });
-
-    // Duration Chart
-    new Chart(document.getElementById('durationChart'), {
-        type: 'bar',
-        data: {
-            labels: <?php echo json_encode(array_keys($duration_counts)); ?>,
-            datasets: [{
-                label: 'Number of Rentals',
-                data: <?php echo json_encode(array_values($duration_counts)); ?>,
-                backgroundColor: '#4BC0C0'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Rental Duration Distribution'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    </script>
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </footer><!-- End Footer -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
-
-  <script>
-    const ctx = document.getElementById('rental-chart').getContext('2d');
-    const rentalChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Model 1', 'Model 2', 'Model 3'],
-        datasets: [{
-          label: 'Number of Rentals',
-          data: [12, 19, 3],
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-    const rentalForm = document.getElementById('rentalForm');
-    rentalForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      const carModel = document.getElementById('carModel').value;
-      const rentalData = rentalChart.data.datasets[0].data;
-      if (carModel === 'model1') {
-        rentalData[0]++;
-      } else if (carModel === 'model2') {
-        rentalData[1]++;
-      } else if (carModel === 'model3') {
-        rentalData[2]++;
-      }
-      rentalChart.update();
-    });
-  </script>
-
-</body>
-
-</html>
