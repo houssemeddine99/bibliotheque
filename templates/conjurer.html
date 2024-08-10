@@ -153,44 +153,64 @@
                             The problem: Alex’s “fate” keeps leading the group straight into danger. 
                             Specifically, into an enchanted jungle where a tree-like creature named Awen seems intent on doing them harm.</p>
                         <div class="product__details__button">
-                            <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> rent</a>
-                            <ul>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__details__widget">
-                            <ul>
-                                <li>
-                                    <span>Availability:</span>
-                                    in Stock
-                                </li>
-                              
-                                <li>
-                                    <span>rent time:</span>
-                                    <div class="size__btn">
-                                        <label for="xs-btn" class="active">
-                                            <input type="radio" id="xs-btn">
-                                            1 day
-                                        </label>
-                                        <label for="s-btn">
-                                            <input type="radio" id="s-btn">
-                                            2 days
-                                        </label>
-                                        <label for="m-btn">
-                                            <input type="radio" id="m-btn">
-                                            3 days
-                                        </label>
-                                        <label for="l-btn">
-                                            <input type="radio" id="l-btn">
-                                            4 days
-                                        </label>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                            <form action="rent.php" method="POST">
+                                <div class="size__btn">
+                                    <label for="1-day">
+                                        <input type="radio" id="1-day" name="duration" value="1" required>
+                                        1 day
+                                    </label>
+                                    <label for="2-days">
+                                        <input type="radio" id="2-days" name="duration" value="2">
+                                        2 days
+                                    </label>
+                                    <label for="3-days">
+                                        <input type="radio" id="3-days" name="duration" value="3">
+                                        3 days
+                                    </label>
+                                    <label for="4-days">
+                                        <input type="radio" id="4-days" name="duration" value="4">
+                                        4 days
+                                    </label>
+                                </div>
+                                <button type="submit" name="add_rental" id="rentBtn" class="cart-btn"><span class="icon_bag_alt"></span> Rent</button>
+                            </form>
+                                                        <ul>
+                                                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                                            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="product__details__widget">
+                                                        <ul>
+                                                            <li>
+                                                                <span>Availability:</span>
+                                                                In Stock
+                                                            </li>
+                                                          
+                                                            <li>
+                                                                <span>rent time:</span>
+                                                                <div class="size__btn">
+                                                                    <label for="xs-btn" class="active">
+                                                                        <input type="radio" id="xs-btn">
+                                                                        1 day
+                                                                    </label>
+                                                                    <label for="s-btn">
+                                                                        <input type="radio" id="s-btn">
+                                                                        2 days
+                                                                    </label>
+                                                                    <label for="m-btn">
+                                                                        <input type="radio" id="m-btn">
+                                                                        3 days
+                                                                    </label>
+                                                                    <label for="l-btn">
+                                                                        <input type="radio" id="l-btn">
+                                                                        4 days
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                 <div class="col-lg-12">
                     <div class="product__details__tab">
                         <ul class="nav nav-tabs" role="tablist">

@@ -26,6 +26,32 @@
 </head>
 
 <body>
+<?php
+session_start();
+
+require_once __DIR__ . '/../core/Router.php';
+require_once __DIR__ . '/../core/Database.php';
+
+$config = require __DIR__ . '/../config/database.php';
+
+try {
+    $db = new Database($config);
+
+    $router = new Router();
+
+    $router->addRoute('GET', '/login', 'AuthController', 'login');
+    $router->addRoute('POST', '/login', 'AuthController', 'login');
+    $router->addRoute('GET', '/logout', 'AuthController', 'logout');
+    $router->addRoute('GET', '/dashboard', 'DashboardController', 'index');
+
+    $router->route($db);
+} catch (Exception $e) {
+    // Log the error
+    error_log($e->getMessage());
+
+    // Show a user-friendly error message
+    echo "An error occurred. Please try again later.";
+}?>
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>

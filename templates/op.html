@@ -72,12 +72,9 @@
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./product-details.html">Product Details</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./rent.php">my rents</a></li>
+
                                 </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
                             <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
@@ -155,30 +152,26 @@
                         <div class="product__details__button">
                             
                             <form action="rent.php" method="POST">
-                                <input type="hidden" name="book_id" value="123"> <!-- Replace with dynamic book ID -->
-                                <input type="hidden" name="rent_duration" value="1_day"> <!-- Replace with selected duration -->
-                                
-                                    <input type="hidden" name="book_id" value="123"> <!-- Replace with dynamic book ID -->
-                                    <div class="size__btn">
-                                        <label for="1-day">
-                                            <input type="radio" id="1-day" name="rent_duration" value="1" required>
-                                            1 day
-                                        </label>
-                                        <label for="2-days">
-                                            <input type="radio" id="2-days" name="rent_duration" value="2">
-                                            2 days
-                                        </label>
-                                        <label for="3-days">
-                                            <input type="radio" id="3-days" name="rent_duration" value="3">
-                                            3 days
-                                        </label>
-                                        <label for="4-days">
-                                            <input type="radio" id="4-days" name="rent_duration" value="4">
-                                            4 days
-                                        </label>
-                                    </div>
-                                    <button type="submit" class="cart-btn"><span class="icon_bag_alt"></span> Rent</button>
-                            </form>
+    <div class="size__btn">
+        <label for="1-day">
+            <input type="radio" id="1-day" name="duration" value="1" required>
+            1 day
+        </label>
+        <label for="2-days">
+            <input type="radio" id="2-days" name="duration" value="2">
+            2 days
+        </label>
+        <label for="3-days">
+            <input type="radio" id="3-days" name="duration" value="3">
+            3 days
+        </label>
+        <label for="4-days">
+            <input type="radio" id="4-days" name="duration" value="4">
+            4 days
+        </label>
+    </div>
+    <button type="submit" name="add_rental" id="rentBtn" class="cart-btn"><span class="icon_bag_alt"></span> Rent</button>
+</form>
                             <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
@@ -353,6 +346,25 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.nicescroll.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Get the Rent button element
+        const rentBtn = document.getElementById('rentBtn');
+
+        // Add a click event listener to the button
+        rentBtn.addEventListener('click', function(event) {
+            // Display a confirmation dialog
+            const userConfirmed = confirm("Are you sure you want to rent this book?");
+            
+            // Check if the user clicked "OK" or "Cancel"
+            if (!userConfirmed) {
+                // If user clicks "Cancel", prevent the default action
+                event.preventDefault();
+            } else {
+                // If user clicks "OK", you can proceed with the action
+                alert("Item rented successfully!");
+            }
+        });
+    </script>
 </body>
 
 </html>
