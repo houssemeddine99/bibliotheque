@@ -137,7 +137,23 @@ p {
     margin-top: 20px;
     font-size: 1.2em;
 }
+.home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF4C60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
 
+        .home-button:hover {
+            background-color: #ff2b3d;
+        }
     </style>
 </head>
 <body>
@@ -180,58 +196,39 @@ p {
         // Fetch rent history for the logged-in user
         $user_id = 1; // Assuming you have a logged-in user ID
 
-        // Handle search and sorting
-        $search_title = isset($_GET['search_title']) ? $_GET['search_title'] : '';
-        $search_status = isset($_GET['search_status']) ? $_GET['search_status'] : '';
-        $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'rental_date';
-        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
-
+        // Get the selected duration from the form, default to 'all' if not set
+        $selected_duration = isset($_GET['duration']) ? $_GET['duration'] : 'all';
+        
         // Base query
-        $query = "SELECT r.*, DATEDIFF(r.return_date, r.rental_date) AS rent_duration 
-                  FROM rentals r
-                  WHERE r.user_id = :user_id";
+        $query = "SELECT *, DATEDIFF(return_date, rental_date) AS rent_duration 
+                  FROM rentals 
+                  WHERE user_id = :user_id";
 
-        // Add search conditions
-        if (!empty($search_title)) {
-            $query .= " AND r.id LIKE :search_title"; // Assuming 'id' is a unique identifier for the rental
+        // Add duration filter if a specific duration is selected
+        if ($selected_duration !== 'all') {
+            $query .= " AND DATEDIFF(return_date, rental_date) = :duration";
         }
-        if (!empty($search_status)) {
-            $query .= " AND r.status = :search_status";
-        }
-
-        // Add sorting
-        $query .= " ORDER BY $sort_by $sort_order";
 
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        if (!empty($search_title)) {
-            $stmt->bindValue(':search_title', "%$search_title%", PDO::PARAM_STR);
-        }
-        if (!empty($search_status)) {
-            $stmt->bindParam(':search_status', $search_status, PDO::PARAM_STR);
+        if ($selected_duration !== 'all') {
+            $stmt->bindParam(':duration', $selected_duration, PDO::PARAM_INT);
         }
         $stmt->execute();
         $rentals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo '<a href="index.html" class="home-button">Return to Home</a>'; // Adjust "index.html" to your home page URL
 
-        // Display search and filter form
+        // Display filter form
         echo "<h1>My Rent History</h1>";
-        echo "<form method='get' class='search-form'>";
-        echo "<input type='text' name='search_title' placeholder='Search by rental ID' value='" . htmlspecialchars($search_title) . "'>";
-        echo "<select name='search_status'>";
-        echo "<option value=''>All Statuses</option>";
-        echo "<option value='Active'" . ($search_status == 'Active' ? " selected" : "") . ">Active</option>";
-        echo "<option value='Returned'" . ($search_status == 'Returned' ? " selected" : "") . ">Returned</option>";
+        echo "<form method='get'>";
+        echo "<select name='duration'>";
+        echo "<option value='all'" . ($selected_duration == 'all' ? " selected" : "") . ">All Durations</option>";
+        echo "<option value='1'" . ($selected_duration == '1' ? " selected" : "") . ">1 Day</option>";
+        echo "<option value='2'" . ($selected_duration == '2' ? " selected" : "") . ">2 Days</option>";
+        echo "<option value='3'" . ($selected_duration == '3' ? " selected" : "") . ">3 Days</option>";
+        echo "<option value='4'" . ($selected_duration == '4' ? " selected" : "") . ">4 Days</option>";
         echo "</select>";
-        echo "<select name='sort_by'>";
-        echo "<option value='rental_date'" . ($sort_by == 'rental_date' ? " selected" : "") . ">Rental Date</option>";
-        echo "<option value='return_date'" . ($sort_by == 'return_date' ? " selected" : "") . ">Return Date</option>";
-        echo "<option value='rent_duration'" . ($sort_by == 'rent_duration' ? " selected" : "") . ">Rent Duration</option>";
-        echo "</select>";
-        echo "<select name='sort_order'>";
-        echo "<option value='DESC'" . ($sort_order == 'DESC' ? " selected" : "") . ">Descending</option>";
-        echo "<option value='ASC'" . ($sort_order == 'ASC' ? " selected" : "") . ">Ascending</option>";
-        echo "</select>";
-        echo "<input type='submit' value='Search & Sort'>";
+        echo "<input type='submit' value='Filter'>";
         echo "</form>";
 
         // Display rent history
@@ -248,75 +245,10 @@ p {
         }
         echo "</table>";
 
-        // Prepare data for statistics
-        $status_counts = array_count_values(array_column($rentals, 'status'));
-        $duration_counts = array_count_values(array_column($rentals, 'rent_duration'));
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
     ?>
-
-    <div class="charts-container">
-        <div class="chart">
-            <canvas id="statusChart"></canvas>
-        </div>
-        <div class="chart">
-            <canvas id="durationChart"></canvas>
-        </div>
-    </div>
-
-    <script>
-    // Status Chart
-    new Chart(document.getElementById('statusChart'), {
-        type: 'pie',
-        data: {
-            labels: <?php echo json_encode(array_keys($status_counts)); ?>,
-            datasets: [{
-                data: <?php echo json_encode(array_values($status_counts)); ?>,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Rental Status Distribution'
-                }
-            }
-        }
-    });
-
-    // Duration Chart
-    new Chart(document.getElementById('durationChart'), {
-        type: 'bar',
-        data: {
-            labels: <?php echo json_encode(array_keys($duration_counts)); ?>,
-            datasets: [{
-                label: 'Number of Rentals',
-                data: <?php echo json_encode(array_values($duration_counts)); ?>,
-                backgroundColor: '#4BC0C0'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Rental Duration Distribution'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    </script>
-
-
     </div>
 </body>
 </html>
