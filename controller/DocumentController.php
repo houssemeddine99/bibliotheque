@@ -1,35 +1,31 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Document.php';
+
+include_once __DIR__ . '/../config/database.php';
+include_once __DIR__ . '/../models/documents.php';
 
 class DocumentController {
-    private $db;
     private $document;
 
     public function __construct() {
         $database = new Database();
-        $this->db = $database->getConnection();
-        $this->document = new Document($this->db);
+        $db = $database->getConnection();
+        $this->document = new Document($db);
     }
 
-    // Méthode pour gérer les requêtes
     public function handleRequest() {
-        $action = isset($_GET['action']) ? $_GET['action'] : 'read';
+        $action = isset($_GET['action']) ? $_GET['action'] : '';
         switch ($action) {
             case 'create':
                 $this->create();
                 break;
-            case 'read':
-                $this->read();
-                break;
-            case 'update':
-                $this->update();
-                break;
             case 'delete':
                 $this->delete();
                 break;
+            case 'delete':
+                $this->update();
+                break;
             default:
-                $this->read();
+                // Handle other actions or show a default view
                 break;
         }
     }
@@ -42,17 +38,25 @@ class DocumentController {
             $this->document->category = $_POST['category'];
 
             if ($this->document->create()) {
-                echo "Document created successfully.";
+                echo "Document added successfully.";
             } else {
-                echo "Failed to create document.";
+                echo "Failed to add document.";
             }
         }
-        require '../views/create.php';
+        header('Location: ../templates/NiceAdmin/tables-general.php');
     }
 
-    private function read() {
-        $stmt = $this->document->read();
-        require '../views/read.php';
+    private function delete() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->document->id = $_POST['id'];
+
+            if ($this->document->delete()) {
+                echo "Document deleted successfully.";
+            } else {
+                echo "Failed to delete document.";
+            }
+        }
+        require '../views/delete.php';
     }
 
     private function update() {
@@ -71,20 +75,8 @@ class DocumentController {
         }
         require '../views/update.php';
     }
-
-    private function delete() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->document->id = $_POST['id'];
-
-            if ($this->document->delete()) {
-                echo "Document deleted successfully.";
-            } else {
-                echo "Failed to delete document.";
-            }
-        }
-        require '../views/delete.php';
-    }
 }
 
 $controller = new DocumentController();
 $controller->handleRequest();
+?>

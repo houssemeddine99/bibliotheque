@@ -43,6 +43,7 @@ try {
     $router->addRoute('POST', '/login', 'AuthController', 'login');
     $router->addRoute('GET', '/logout', 'AuthController', 'logout');
     $router->addRoute('GET', '/dashboard', 'DashboardController', 'index');
+    $router->addRoute('GET', '/list_documents', 'DocumentController', 'index');
 
     $router->route($db);
 } catch (Exception $e) {

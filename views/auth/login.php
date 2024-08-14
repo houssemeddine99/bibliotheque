@@ -1,9 +1,7 @@
 <?php 
+session_start(); // Start the session at the beginning of the script
 $title = 'Login'; 
 $error = null; // Initialize the error variable
-
-// Start output buffering
-ob_start(); 
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate credentials
     if ($username === $correct_username && $password === $correct_password) {
+        // Set session variables
+        $_SESSION['user_id'] = 1; // You might want to use a real user ID here
+        $_SESSION['username'] = $username;
+
         // Redirect to the admin dashboard or desired page
         header('Location: ../../templates/NiceAdmin/index.html');
         exit(); // Make sure to exit after the redirection
@@ -25,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Invalid username or password';
     }
 }
+
+// Start output buffering
+ob_start(); 
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title) ?></title>
+    <style>
     <style>
         body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f0f0; }
         .login-container { background-color: white; padding: 2em; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -43,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button { margin-top: 1em; padding: 0.5em; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
         button:hover { background-color: #0056b3; }
         .error { color: red; margin-top: 1em; }
+    </style>
     </style>
 </head>
 <body>

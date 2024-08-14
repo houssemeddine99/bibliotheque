@@ -56,6 +56,10 @@
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
+    <?php
+    session_start();
+    $is_logged_in = isset($_SESSION['user_id']);
+    ?>
     <header class="header">
         <div class="container-fluid">
             <div class="row">
@@ -81,12 +85,16 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="../views/auth/login.php">Login</a>
-                            <a href="#">Register</a>
+                            <?php if ($is_logged_in): ?>
+                                <span>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                            <?php else: ?>
+                                <a href="../views/auth/login.php">Login</a>
+                                <a href="#">Register</a>
+                            <?php endif; ?>
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
-                            <li><a href="#"><span class="icon_heart_alt"></span>
+                            <li><a href="niceadmin/index.html"><span class="icon_heart_alt"></span>
                                 <div class="tip">2</div>
                             </a></li>
                             <li><a href="#"><span class="icon_bag_alt"></span>

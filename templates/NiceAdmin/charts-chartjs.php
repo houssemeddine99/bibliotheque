@@ -676,8 +676,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
+            <a href="tables-general.php">
+              <i class="bi bi-circle"></i><span>gerer les documents</span>
             </a>
           </li>
           <li>
@@ -779,7 +779,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       </li><!-- End Error 404 Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../index.html">
+        <a class="nav-link collapsed" href="../index.php">
           <i class="bi bi-file-earmark"></i>
           <span>home</span>
         </a>
