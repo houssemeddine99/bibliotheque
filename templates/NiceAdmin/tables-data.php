@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Rental System</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -683,7 +681,36 @@ p {
 </head>
 <body>
     <div class="container">
-    <?php
+    <!-- Search and filter form -->
+    <form method='get' class='mb-3'>
+                <div class="row g-3">
+                  
+                  <div class="col-md-3">
+                    <select name='search_status' class="form-select">
+                      <option value=''>All Statuses</option>
+                      <option value='Active' <?php echo ($search_status == 'Active' ? "selected" : ""); ?>>Active</option>
+                      <option value='Returned' <?php echo ($search_status == 'Returned' ? "selected" : ""); ?>>Returned</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <select name='sort_by' class="form-select">
+                      <option value='rental_date' <?php echo ($sort_by == 'rental_date' ? "selected" : ""); ?>>Rental Date</option>
+                      <option value='return_date' <?php echo ($sort_by == 'return_date' ? "selected" : ""); ?>>Return Date</option>
+                      <option value='rent_duration' <?php echo ($sort_by == 'rent_duration' ? "selected" : ""); ?>>Rent Duration</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <select name='sort_order' class="form-select">
+                      <option value='DESC' <?php echo ($sort_order == 'DESC' ? "selected" : ""); ?>>Descending</option>
+                      <option value='ASC' <?php echo ($sort_order == 'ASC' ? "selected" : ""); ?>>Ascending</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search & Sort</button>
+                  </div>
+                </div>
+              </form>
+   <?php
     include_once '../../controller/RentalController.php';
 
     $controller = new RentalController();
@@ -725,6 +752,7 @@ p {
     }
     echo "</table>";
     ?>
+    
     </div>
 </body>
 </html>
