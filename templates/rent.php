@@ -219,7 +219,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1 && isset($_GET['rental_id']
         }
         $stmt->execute();
         $rentals = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo '<a href="index.html" class="home-button">Return to Home</a>'; // Adjust "index.html" to your home page URL
+        echo '<a href="index.php" class="home-button">Return to Home</a>'; // Adjust "index.html" to your home page URL
 
         // Display filter form
         echo "<h1>My Rent History</h1>";
