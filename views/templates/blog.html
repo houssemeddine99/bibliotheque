@@ -7,7 +7,7 @@
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Page Turner</title>
+    <title>Ashion | Template</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
             </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+            <a href="./index.php"><img src="img/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -61,14 +61,16 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop.html">rent</a></li>
+                            <li><a href="./index.php">Home</a></li>
+                            <li><a href="#">Women’s</a></li>
+                            <li><a href="#">Men’s</a></li>
+                            <li class="active"><a href="./shop.html">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./product-details.html">Product Details</a></li>
@@ -113,9 +115,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="#">fantasy </a>
-                        <span>People We Meet on Vacation</span>
+                        <a href="./index.php"><i class="fa fa-home"></i> Home</a>
+                        <span>Blog</span>
                     </div>
                 </div>
             </div>
@@ -123,137 +124,181 @@
     </div>
     <!-- Breadcrumb End -->
 
-    <!-- Product Details Section Begin -->
-    <section class="product-details spad">
+    <!-- Blog Section Begin -->
+    <section class="blog spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="product__details__pic">
-                        <div class="product__details__slider__content">
-                            <div class="product__details__pic__slider owl-carousel">
-                                <img data-hash="product-7" class="product__big__img" src="img/product/details/product-7.png" alt="">
-                            </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic large__item set-bg" data-setbg="img/blog/blog-1.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">No Bad Blood! The Reason Why Tamr Judge Finally Made Up With...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-7.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Pot Party! See Farrah Abraham Flaunt Smoking Body At...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-9.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">CMT Awards 2019 Red Carpet Arrivals Carrie Underwood, Sheryl...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="product__details__text">
-                        <h3>People We Meet on Vacation<span>author: Emily Henry</span></h3>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <span>( 3.6k reviews )</span>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-2.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Amf Cannes Red Carpet Celebrities Kendall Jenner, Pamela...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
                         </div>
-                        <div class="product__details__price">15.9 TND</div>
-                        <p>Poppy and Alex. Alex and Poppy. They have nothing in common. She’s a wild child; he wears khakis.
-                             She has insatiable wanderlust; he prefers to stay home with a book. And somehow, ever since a fateful car share home from college many years ago, 
-                             they are the very best of friends. For most of the year they live far apart—she’s in New York City, 
-                            and he’s in their small hometown—but every summer, for a decade, they have taken one glorious week of vacation together.</p>
-                        <div class="product__details__button">
-                            <form action="rent.php" method="POST">
-                                <div class="size__btn">
-                                    <label for="1-day">
-                                        <input type="radio" id="1-day" name="duration" value="1" required>
-                                        1 day
-                                    </label>
-                                    <label for="2-days">
-                                        <input type="radio" id="2-days" name="duration" value="2">
-                                        2 days
-                                    </label>
-                                    <label for="3-days">
-                                        <input type="radio" id="3-days" name="duration" value="3">
-                                        3 days
-                                    </label>
-                                    <label for="4-days">
-                                        <input type="radio" id="4-days" name="duration" value="4">
-                                        4 days
-                                    </label>
-                                </div>
-                                <button type="submit" name="add_rental" id="rentBtn" class="cart-btn"><span class="icon_bag_alt"></span> Rent</button>
-                            </form>
-                                                        <ul>
-                                                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                                            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="product__details__widget">
-                                                        <ul>
-                                                            <li>
-                                                                <span>Availability:</span>
-                                                                In Stock
-                                                            </li>
-                                                          
-                                                            <li>
-                                                                <span>rent time:</span>
-                                                                <div class="size__btn">
-                                                                    <label for="xs-btn" class="active">
-                                                                        <input type="radio" id="xs-btn">
-                                                                        1 day
-                                                                    </label>
-                                                                    <label for="s-btn">
-                                                                        <input type="radio" id="s-btn">
-                                                                        2 days
-                                                                    </label>
-                                                                    <label for="m-btn">
-                                                                        <input type="radio" id="m-btn">
-                                                                        3 days
-                                                                    </label>
-                                                                    <label for="l-btn">
-                                                                        <input type="radio" id="l-btn">
-                                                                        4 days
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                <div class="col-lg-12">
-                    <div class="product__details__tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Geners</a>
-                            </li>
-
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <h6>Description</h6> <p>
-                                    Poppy and Alex. Alex and Poppy. They have nothing in common. She’s a wild child; he wears khakis.
-                                    She has insatiable wanderlust; he prefers to stay home with a book. And somehow, ever since a fateful car share home from college many years ago, 
-                                    they are the very best of friends. For most of the year they live far apart—she’s in New York City, 
-                                   and he’s in their small hometown—but every summer, for a decade, they have taken one glorious week of vacation together.
-                                </p>
-                                
-                                
-                            </div>
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <h6>Gneres</h6>
-                                <a href="" class="Button Button--tag-inline Button--medium"><span class="Button__labelItem">High fantasy</span></a>
-                                    <span class="Button__labelItem"></span> </a><br>
-                                    <a href="" class="Button Button--tag-inline Button--medium"><span class="Button__labelItem">Adventure</span></a>
-                                    <span class="Button__labelItem"></span>   </a><br>
-                            </div>
-                          
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-4.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Ireland Baldwin Shows Off Trendy Ilse Valfre Tattoo At Stagecoach...</a>
+                            </h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-8.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Kim Kardashian Steps Out In Paris Wearing Shocking Sparkly...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-10.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">A-list Battle! Angelina Jolie & Lady Gaga Fighting Over Who...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-                
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-3.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Gigi Hadid, Rita Ora, Serena & Other Hot Celebs Stun At 2019...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-5.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Billboard Music Awards: Best, Worst & Wackiest Dresses On The...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog__item">
+                        <div class="blog__item__pic large__item set-bg" data-setbg="img/blog/blog-6.jpg"></div>
+                        <div class="blog__item__text">
+                            <h6><a href="#">Stephanie Pratt Busts Out Of Teeny Black Bikini During Hawaii...</a></h6>
+                            <ul>
+                                <li>by <span>Ema Timahe</span></li>
+                                <li>Seb 17, 2019</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 text-center">
+                    <a href="#" class="primary-btn load-btn">Load more posts</a>
+                </div>
             </div>
         </div>
     </section>
-    <!-- Product Details Section End -->
+    <!-- Blog Section End -->
 
-    
+    <!-- Instagram Begin -->
+    <div class="instagram">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Instagram End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -262,7 +307,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.php"><img src="img/logo.png" alt=""></a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                         cilisis.</p>

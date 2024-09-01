@@ -160,47 +160,49 @@ p {
 <body>
     <div class="container">
     <?php
-    include_once './../controller/RentalController.php';
+include_once './../controller/RentalController.php';
 
-    $controller = new RentalController();
+$controller = new RentalController();
 
+// Fetch rent history for the logged-in user
+$user_id = 1;
+$selected_duration = isset($_GET['duration']) ? $_GET['duration'] : 'all';
+$rentals = $controller->getRentals($user_id, $selected_duration);
 
-    // Fetch rent history for the logged-in user
-    $user_id = 1;
-    $selected_duration = isset($_GET['duration']) ? $_GET['duration'] : 'all';
-    $rentals = $controller->getRentals($user_id, $selected_duration);
+// Update status for expired rentals
+$controller->updateExpiredRentals();
 
-    echo '<a href="../templates/index.php" class="home-button">Return to Home</a>'; // Adjust "index.html" to your home page URL
-    echo '<a href="rent_document.php" class="home-button">Rent a Document</a>';
+echo '<a href="templates/index.php" class="home-button">Return to Home</a>';
+echo '<a href="rent_document.php" class="home-button">Rent a Document</a>';
 
-    // Display filter form
-    echo "<h1>My Rent History</h1>";
-    echo "<form method='get'>";
-    echo "<select name='duration'>";
-    echo "<option value='all'" . ($selected_duration == 'all' ? " selected" : "") . ">All Durations</option>";
-    echo "<option value='1'" . ($selected_duration == '1' ? " selected" : "") . ">1 Day</option>";
-    echo "<option value='2'" . ($selected_duration == '2' ? " selected" : "") . ">2 Days</option>";
-    echo "<option value='3'" . ($selected_duration == '3' ? " selected" : "") . ">3 Days</option>";
-    echo "<option value='4'" . ($selected_duration == '4' ? " selected" : "") . ">4 Days</option>";
-    echo "</select>";
-    echo "<input type='submit' value='Filter'>";
-    echo "</form>";
+// Display filter form
+echo "<h1>My Rent History</h1>";
+echo "<form method='get'>";
+echo "<select name='duration'>";
+echo "<option value='all'" . ($selected_duration == 'all' ? " selected" : "") . ">All Durations</option>";
+echo "<option value='1'" . ($selected_duration == '1' ? " selected" : "") . ">1 Day</option>";
+echo "<option value='2'" . ($selected_duration == '2' ? " selected" : "") . ">2 Days</option>";
+echo "<option value='3'" . ($selected_duration == '3' ? " selected" : "") . ">3 Days</option>";
+echo "<option value='4'" . ($selected_duration == '4' ? " selected" : "") . ">4 Days</option>";
+echo "</select>";
+echo "<input type='submit' value='Filter'>";
+echo "</form>";
 
-    // Display rent history
-    echo "<table>";
-    echo "<tr><th>Rental ID</th><th>Book ID</th><th>Rental Date</th><th>Return Date</th><th>Rent Duration</th><th>Status</th></tr>";
-    foreach ($rentals as $rental) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($rental['id']) . "</td>";
-        echo "<td>" . htmlspecialchars($rental['book_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($rental['rental_date']) . "</td>";
-        echo "<td>" . htmlspecialchars($rental['return_date']) . "</td>";
-        echo "<td>" . htmlspecialchars($rental['rent_duration']) . " days</td>";
-        echo "<td>" . htmlspecialchars($rental['status']) . "</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-    ?>
+// Display rent history
+echo "<table>";
+echo "<tr><th>Rental ID</th><th>Book ID</th><th>Rental Date</th><th>Return Date</th><th>Rent Duration</th><th>Status</th></tr>";
+foreach ($rentals as $rental) {
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($rental['id']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['book_id']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['rental_date']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['return_date']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['rent_duration']) . " days</td>";
+    echo "<td>" . htmlspecialchars($rental['status']) . "</td>";
+    echo "</tr>";
+}
+echo "</table>";
+?>
     </div>
 </body>
 </html>

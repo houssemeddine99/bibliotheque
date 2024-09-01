@@ -1,10 +1,12 @@
 <?php
 include_once './../config/database.php';
 include_once './../models/rental.php';
+include_once '../controller/RentalController.php';
+
 
 $database = new Database();
 $db = $database->getConnection();
-$rental = new Rental($db);
+$rentalController = new RentalController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_rental'])) {
@@ -12,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $book_id = $_POST['book_id'];
         $duration = $_POST['duration'];
 
-        $new_rental_id = $rental->addRental($user_id, $book_id, $duration);
+        $new_rental_id = $rentalController->addRental($user_id, $book_id, $duration);
 
         if ($new_rental_id) {
             $success_message = "New rental added successfully! Rental ID: $new_rental_id";
@@ -22,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['return_rental'])) {
         $rental_id = $_POST['rental_id'];
 
-        $is_returned = $rental->returnRental($rental_id);
+        $is_returned = $rentalController->returnRental($rental_id);
 
         if ($is_returned) {
             $success_message = "Rental returned successfully!";
@@ -131,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<a href="rent_history.php" class="home-button">Return to Home</a> 
+<a href="templates/NiceAdmin/tables-data.php" class="home-button">Return to Home</a> 
     <div class="container">
         
         <h1>Create New Rental</h1>
@@ -166,8 +168,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <input type="submit" name="return_rental" value="Return Rental">
         </form>
-
+        <h2>Current Rentals</h2>
+<table border="1">
+    <tr>
+        <th>Rental ID</th>
+        <th>Book ID</th>
+        <th>Rental Date</th>
+        <th>Return Date</th>
+        <th>Status</th>
+    </tr>
+    <?php
+    $rentals = $rentalController->getAllRentals();
+    foreach ($rentals as $rental) {
+        echo "<tr>";
+        echo "<td>" . $rental['id'] . "</td>";
+        echo "<td>" . $rental['book_id'] . "</td>";
+        echo "<td>" . $rental['rental_date'] . "</td>";
+        echo "<td>" . $rental['return_date'] . "</td>";
+        echo "<td>" . $rental['status'] . "</td>";
+        echo "</tr>";
+    }
+    ?>
         
     </div>
+    
 </body>
 </html>

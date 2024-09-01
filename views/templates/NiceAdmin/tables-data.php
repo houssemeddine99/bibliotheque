@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Forms / Layouts - NiceAdmin Bootstrap Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Rental System</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -360,17 +358,17 @@
       </li><!-- End Components Nav -->
 
       <li class="nav-item">
-        <a class="nav-link " data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="forms-elements.html">
               <i class="bi bi-circle"></i><span>Form Elements</span>
             </a>
           </li>
           <li>
-            <a href="forms-layouts.html" class="active">
+            <a href="forms-layouts.html">
               <i class="bi bi-circle"></i><span>Form Layouts</span>
             </a>
           </li>
@@ -388,17 +386,17 @@
       </li><!-- End Forms Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
+            <a href="tables-general.php">
               <i class="bi bi-circle"></i><span>General Tables</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="tables-data.html" class="active">
               <i class="bi bi-circle"></i><span>Data Tables</span>
             </a>
           </li>
@@ -496,9 +494,9 @@
       </li><!-- End Error 404 Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-blank.html">
+        <a class="nav-link collapsed" href="../index.php">
           <i class="bi bi-file-earmark"></i>
-          <span>Blank</span>
+          <span>home</span>
         </a>
       </li><!-- End Blank Page Nav -->
 
@@ -509,279 +507,272 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Form Layouts</h1>
+      <h1>Data Tables</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Layouts</li>
+          <li class="breadcrumb-item">Tables</li>
+          <li class="breadcrumb-item active">Data</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
+
     <section class="section">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Rental System</title>
+    <style>
+        body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Horizontal Form</h5>
+.container {
+    width: 85%;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-              <!-- Horizontal Form -->
-              <form>
-                <div class="row mb-3">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Your Name</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputText">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                  <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword">
-                  </div>
-                </div>
-                <fieldset class="row mb-3">
-                  <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                  <div class="col-sm-10">
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                      <label class="form-check-label" for="gridRadios1">
-                        First radio
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                      <label class="form-check-label" for="gridRadios2">
-                        Second radio
-                      </label>
-                    </div>
-                    <div class="form-check disabled">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                      <label class="form-check-label" for="gridRadios3">
-                        Third disabled radio
-                      </label>
-                    </div>
-                  </div>
-                </fieldset>
-                <div class="row mb-3">
-                  <div class="col-sm-10 offset-sm-2">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="gridCheck1">
-                      <label class="form-check-label" for="gridCheck1">
-                        Example checkbox
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
-              </form><!-- End Horizontal Form -->
+h1, h2 {
+    color: #333;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
 
-            </div>
-          </div>
+h1 {
+    font-size: 2.5em;
+    letter-spacing: 1px;
+}
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Multi Columns Form</h5>
+h2 {
+    font-size: 2em;
+    letter-spacing: 0.5px;
+}
 
-              <!-- Multi Columns Form -->
-              <form class="row g-3">
-                <div class="col-md-12">
-                  <label for="inputName5" class="form-label">Your Name</label>
-                  <input type="text" class="form-control" id="inputName5">
-                </div>
-                <div class="col-md-6">
-                  <label for="inputEmail5" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="inputEmail5">
-                </div>
-                <div class="col-md-6">
-                  <label for="inputPassword5" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="inputPassword5">
-                </div>
-                <div class="col-12">
-                  <label for="inputAddress5" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="inputAddres5s" placeholder="1234 Main St">
-                </div>
-                <div class="col-12">
-                  <label for="inputAddress2" class="form-label">Address 2</label>
-                  <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                </div>
-                <div class="col-md-6">
-                  <label for="inputCity" class="form-label">City</label>
-                  <input type="text" class="form-control" id="inputCity">
-                </div>
-                <div class="col-md-4">
-                  <label for="inputState" class="form-label">State</label>
-                  <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label for="inputZip" class="form-label">Zip</label>
-                  <input type="text" class="form-control" id="inputZip">
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                      Check me out
-                    </label>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
-              </form><!-- End Multi Columns Form -->
+/* Rental Form */
+.rental-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
 
-            </div>
-          </div>
+.rental-form input, .rental-form select {
+    margin-bottom: 15px;
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
 
-        </div>
+.rental-form input[type="submit"] {
+    background-color: #FF4C60;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
 
-        <div class="col-lg-6">
+.rental-form input[type="submit"]:hover {
+    background-color: #ff2b3d;
+}
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Vertical Form</h5>
+/* Filter Form */
+form[method="get"] {
+    margin-bottom: 30px;
+    text-align: center;
+}
 
-              <!-- Vertical Form -->
-              <form class="row g-3">
-                <div class="col-12">
-                  <label for="inputNanme4" class="form-label">Your Name</label>
-                  <input type="text" class="form-control" id="inputNanme4">
-                </div>
-                <div class="col-12">
-                  <label for="inputEmail4" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="inputEmail4">
-                </div>
-                <div class="col-12">
-                  <label for="inputPassword4" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="inputPassword4">
-                </div>
-                <div class="col-12">
-                  <label for="inputAddress" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
-              </form><!-- Vertical Form -->
+form[method="get"] select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
 
-            </div>
-          </div>
+form[method="get"] input[type="submit"] {
+    padding: 12px 25px;
+    background-color: #FF4C60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">No Labels / Placeholders as labels Form</h5>
+form[method="get"] input[type="submit"]:hover {
+    background-color: #ff2b3d;
+}
 
-              <!-- No Labels Form -->
-              <form class="row g-3">
-                <div class="col-md-12">
-                  <input type="text" class="form-control" placeholder="Your Name">
-                </div>
-                <div class="col-md-6">
-                  <input type="email" class="form-control" placeholder="Email">
-                </div>
-                <div class="col-md-6">
-                  <input type="password" class="form-control" placeholder="Password">
-                </div>
-                <div class="col-12">
-                  <input type="text" class="form-control" placeholder="Address">
-                </div>
-                <div class="col-md-6">
-                  <input type="text" class="form-control" placeholder="City">
-                </div>
-                <div class="col-md-4">
-                  <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <input type="text" class="form-control" placeholder="Zip">
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
-              </form><!-- End No Labels Form -->
+/* Rent History Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-            </div>
-          </div>
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Floating labels Form</h5>
+table th {
+    background-color: #FF4C60;
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 
-              <!-- Floating Labels Form -->
-              <form class="row g-3">
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Your Name">
-                    <label for="floatingName">Your Name</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingEmail" placeholder="Your Email">
-                    <label for="floatingEmail">Your Email</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Password</label>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-floating">
-                    <textarea class="form-control" placeholder="Address" id="floatingTextarea" style="height: 100px;"></textarea>
-                    <label for="floatingTextarea">Address</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="col-md-12">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="floatingCity" placeholder="City">
-                      <label for="floatingCity">City</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <select class="form-select" id="floatingSelect" aria-label="State">
-                      <option selected>New York</option>
-                      <option value="1">Oregon</option>
-                      <option value="2">DC</option>
-                    </select>
-                    <label for="floatingSelect">State</label>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingZip" placeholder="Zip">
-                    <label for="floatingZip">Zip</label>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
-              </form><!-- End floating Labels Form -->
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
 
-            </div>
-          </div>
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+p {
+    color: #FF4C60;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+.home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF4C60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .home-button:hover {
+            background-color: #ff2b3d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <!-- Search and filter form -->
+    <?php
+// Initialize variables with default values or from GET parameters
+$search_status = isset($_GET['search_status']) ? $_GET['search_status'] : '';
+$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'rental_date';
+$sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
+?>
+
+<form method="get" class="row g-3 align-items-end mb-4">
+  <div class="col-md-3">
+    <label for="search_status" class="form-label">Status</label>
+    <select name="search_status" id="search_status" class="form-select">
+      <option value="">All Statuses</option>
+      <option value="Active" <?php echo ($search_status == 'Active') ? 'selected' : ''; ?>>Active</option>
+      <option value="Returned" <?php echo ($search_status == 'Returned') ? 'selected' : ''; ?>>Returned</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label for="sort_by" class="form-label">Sort By</label>
+    <select name="sort_by" id="sort_by" class="form-select">
+      <option value="rental_date" <?php echo ($sort_by == 'rental_date') ? 'selected' : ''; ?>>Rental Date</option>
+      <option value="return_date" <?php echo ($sort_by == 'return_date') ? 'selected' : ''; ?>>Return Date</option>
+      <option value="rent_duration" <?php echo ($sort_by == 'rent_duration') ? 'selected' : ''; ?>>Rent Duration</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label for="sort_order" class="form-label">Sort Order</label>
+    <select name="sort_order" id="sort_order" class="form-select">
+      <option value="DESC" <?php echo ($sort_order == 'DESC') ? 'selected' : ''; ?>>Descending</option>
+      <option value="ASC" <?php echo ($sort_order == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <button type="submit" class="btn btn-primary w-100">Search & Sort</button>
+  </div>
+</form>
+
+
+              <?php
+include_once '../../../controller/RentalController.php';
+
+// Database connection
+$host = 'localhost';
+$dbname = 'bibliotheque';
+$username = 'root';
+$password = '';
+
+try {
+    $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+    exit;
+}
+
+$controller = new RentalController($db);
+
+// Fetch rent history for the logged-in user
+$user_id = 1; // Replace with actual user authentication
+$selected_duration = isset($_GET['duration']) ? $_GET['duration'] : 'all';
+$search_status = isset($_GET['search_status']) ? $_GET['search_status'] : '';
+$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'rental_date';
+$sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
+echo '<a href="../../rent_document.php" class="home-button">Rent a Document</a>';
+
+$rentals = $controller->getRentals($user_id, $selected_duration, $search_status, $sort_by, $sort_order);
+
+// Update status for expired rentals
+$controller->updateExpiredRentals();
+
+// Display rent history table
+echo "<table class='table table-bordered table-striped'>";
+echo "<thead><tr><th>Rental ID</th><th>Book ID</th><th>Rental Date</th><th>Return Date</th><th>Rent Duration</th><th>Status</th></tr></thead><tbody>";
+foreach ($rentals as $rental) {
+    $rentDuration = (new DateTime($rental['return_date']))->diff(new DateTime($rental['rental_date']))->days;
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($rental['id']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['book_id']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['rental_date']) . "</td>";
+    echo "<td>" . htmlspecialchars($rental['return_date']) . "</td>";
+    echo "<td>" . htmlspecialchars($rentDuration) . " days</td>";
+    echo "<td>" . htmlspecialchars($rental['status']) . "</td>";
+    echo "</tr>";
+}
+echo "</tbody></table>";
+?>
+    
+    </div>
+</body>
+</html>
+
+         
 
         </div>
       </div>

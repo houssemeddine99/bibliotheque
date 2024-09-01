@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['username'] = $username;
 
         // Redirect to the admin dashboard or desired page
-        header('Location: ../../templates/NiceAdmin/index.html');
+        header('Location: ../templates/NiceAdmin/index.html');
         exit(); // Make sure to exit after the redirection
     } else {
         // If credentials are incorrect, set an error message
