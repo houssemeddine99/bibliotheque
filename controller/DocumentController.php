@@ -43,7 +43,7 @@ class DocumentController {
                 echo "Failed to add document.";
             }
         }
-        header('Location: ../views/list_documents/list_documents.php');
+        header('Location: ../views/templates/niceadmin/tables-general.php');
     }
 
     private function delete() {

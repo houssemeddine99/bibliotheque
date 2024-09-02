@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $document->id = $_POST['id'];
 
     if ($document->delete()) {
-        header('Location: ../templates/NiceAdmin/tables-general.php');
+        header('Location: ../views/templates/NiceAdmin/tables-general.php');
         exit();
     } else {
         echo "Failed to delete document.";

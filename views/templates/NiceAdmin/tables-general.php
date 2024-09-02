@@ -211,14 +211,14 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img src="assets/img/yuki.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Mr. Abdel Al</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6>Houssem Eddine Abdel Al</h6>
+              <span>Web Developer</span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -564,9 +564,9 @@ $documents = $document->read();
 </head>
 <body>
     <div class="actions">
-        <a href="../../views/create.php" class="btn btn-primary">Create Document</a>
-        <a href="../../views/update.php" class="btn btn-primary">Update Document</a>
-        <a href="../../views/delete.php" class="btn btn-primary">Delete Document</a>
+        <a href="../../create.php" class="btn btn-primary">Create Document</a>
+        <a href="../../update.php" class="btn btn-primary">Update Document</a>
+        <a href="../../delete.php" class="btn btn-primary">Delete Document</a>
     </div>
     
     <h1>Document List</h1>

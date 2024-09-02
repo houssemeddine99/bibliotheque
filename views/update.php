@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $document->category = $_POST['category'];
 
     if ($document->update()) {
-        header('Location: ../templates/NiceAdmin/tables-general.php');
+        header('Location: ../views/templates/NiceAdmin/tables-general.php');
         exit();
     } else {
         echo "Failed to update document.";
